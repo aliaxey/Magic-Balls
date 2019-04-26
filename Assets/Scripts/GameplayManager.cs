@@ -6,7 +6,7 @@ public class GameplayManager:IGameplayManager
 {
     private IMeshManager meshManager;
     public IState state { get; set; }
-    public bool InverseGravity { get; }
+    public bool InverseGravity { get; set; }
     public bool isStability;
     public bool haveEmptyCells;
     public int score;
@@ -22,9 +22,17 @@ public class GameplayManager:IGameplayManager
     }
     public void GravityUpdate() {
         MapUpdate();
+        if (InverseGravity) {
+           InverseGravityUpdate();
+        } else {
+            NormalGravityUpdate();
+        }
+        MapUpdate();
+    }
+    private void NormalGravityUpdate() {
         for (int col = 0; col < Constants.WIDTH; col++) {
             for (int row = 0; row < Constants.HEIGHT - 1; row++) {
-                if (meshManager.Mesh[col, row] == null && meshManager.Mesh[col,row + 1]!=null) {
+                if (meshManager.Mesh[col, row] == null && meshManager.Mesh[col, row + 1] != null) {
                     meshManager.Mesh[col, row] = meshManager.Mesh[col, row + 1];
                     meshManager.Mesh[col, row + 1] = null;
                     meshManager.Mesh[col, row].Update(col, row);
@@ -33,9 +41,22 @@ public class GameplayManager:IGameplayManager
                 }
             }
         }
-        MapUpdate();
     }
-    public void FillStartRow(int row) {
+    private void InverseGravityUpdate() {
+        for (int col = 0; col < Constants.WIDTH; col++) {
+            for (int row = Constants.HEIGHT - 1; row > 0 ; row--) {
+                if (meshManager.Mesh[col, row] == null && meshManager.Mesh[col, row - 1] != null) {
+                    meshManager.Mesh[col, row] = meshManager.Mesh[col, row - 1];
+                    meshManager.Mesh[col, row - 1] = null;
+                    meshManager.Mesh[col, row].Update(col, row);
+                    isStability = false;
+                    haveEmptyCells = true;
+                }
+            }
+        }
+    }
+    public void FillStartRow() {
+        int row = GetStartRow(); 
         for (int col = 0; col < Constants.WIDTH; col++) {
             if (meshManager.Mesh[col, row] == null) {
                 meshManager.CreateRandomBall(col, row);
@@ -61,6 +82,11 @@ public class GameplayManager:IGameplayManager
         haveEmptyCells = true;
         GravityUpdate();
         score += list.Count;
+        if (list.Count >= 4) {
+            Cell pattern = list[Random.Range(0, list.Count)];
+            meshManager.CreateBooster(pattern.TargetX, pattern.TargetY, pattern.ballType); 
+        }
+        CheckGravityChange(list);
         Debug.Log($"Boom! Destroyed {list.Count} balls!\nScore: {score}"); 
     }
     public IList<Cell> Match() {
@@ -164,7 +190,14 @@ public class GameplayManager:IGameplayManager
             }
         }
     }
-
+    private void CheckGravityChange(IList<Cell> list) {
+        foreach(Cell cell in list) {
+            if (cell.isBooster) {
+                InverseGravity = !InverseGravity;
+                return;
+            }
+        }
+    }
  
     public void CellClick(int x, int y) {
         state.OnCellSelect(x, y);
@@ -182,6 +215,13 @@ public class GameplayManager:IGameplayManager
             }
         }
         
+    }
+    private int GetStartRow() {
+        if (InverseGravity) {
+            return 0;
+        } else {
+            return Constants.HEIGHT - 1;
+        }
     }
 }
 /*Debug.Log($"{x}  {y}");

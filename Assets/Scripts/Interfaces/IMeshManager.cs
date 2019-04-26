@@ -7,6 +7,7 @@ public interface IMeshManager {
     void DestroyBall(Cell cell);
     void DestroyBall(int col, int row);
     Vector3 AbsolutePos(Cell cell);
+    void CreateBooster(int col, int row, BallType type);
 
 
 }

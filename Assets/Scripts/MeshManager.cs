@@ -44,8 +44,8 @@ public class MeshManager:IMeshManager{
         var ball = publisher.CreateBall(type, AbsolutePos(col, row));
         Mesh[col, row] = new Cell(ball,type);
     }
-    void CreateBooster(int col,int row,BallType type) {
-        var ball = publisher.CreateBall(type, AbsolutePos(col, row));
+    public void CreateBooster(int col,int row,BallType type) {
+        var ball = publisher.CreateBooster(type, AbsolutePos(col, row));
         Mesh[col, row] = new Cell(ball, type);
         Mesh[col, row].isBooster = true; 
     }
@@ -83,4 +83,6 @@ public class MeshManager:IMeshManager{
                 return BallType.YELLOW;
         }
     }
+
+
 }

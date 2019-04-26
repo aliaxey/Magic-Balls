@@ -27,7 +27,7 @@ public class UpdatingState : IState {
             
             if (gameplayManager.haveEmptyCells) {
                 gameplayManager.GravityUpdate();
-                gameplayManager.FillStartRow(Constants.HEIGHT - 1);
+                gameplayManager.FillStartRow();
                 gameplayManager.GravityUpdate();
             } else  {
                 list = gameplayManager.Match();

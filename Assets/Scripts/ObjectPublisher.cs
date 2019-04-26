@@ -22,7 +22,6 @@ public class ObjectPubisher : IObjectPublisher {
 
     private GameObject Publish(Object obj, Vector3 position) {
         GameObject gameObject = Object.Instantiate(obj, position, Quaternion.identity)as GameObject;
-        
         gameObject.AddComponent<TochHandler>();
         var handler = gameObject.GetComponent<TochHandler>();
         handler.inputMamager = input;
