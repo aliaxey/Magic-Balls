@@ -27,6 +27,18 @@ public class MeshManager:IMeshManager{
     public void Swap() {
 
     }
+    public void DestroyBall(Cell cell) {
+        DestroyBall(cell.TargetX, cell.TargetY);
+         //Object.Destroy(cell.ball);
+         //Mesh[cell.TargetX, cell.TargetX] = null;
+        
+    }
+    public void DestroyBall(int col, int row) {
+        if (Mesh[col, row] != null) {
+            Object.Destroy(Mesh[col, row].ball);
+        }
+        Mesh[col, row] = null;
+    }
     public void CreateRandomBall(int col, int row) {
         BallType type = GetRandomBall();
         var ball = publisher.CreateBall(type, AbsolutePos(col, row));

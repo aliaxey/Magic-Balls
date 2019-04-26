@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameplayManager:IGameplayManager
@@ -28,6 +29,7 @@ public class GameplayManager:IGameplayManager
                 }
             }
         }
+        MapUpdate();
     }
     public void FillStartRow(int row) {
         for (int col = 0; col < Constants.WIDTH; col++) {
@@ -37,10 +39,83 @@ public class GameplayManager:IGameplayManager
         }
         GravityUpdate();
     }
-    public bool HaveMatch() {
-        for (int col = 0; col < Constants.WIDTH; col++) {
-            
+    public void SwapCells(int col, int row, int destCol,int destRow) {
+        Cell tmp = meshManager.Mesh[destCol, destRow];
+        meshManager.Mesh[destCol, destRow] = meshManager.Mesh[col, row];
+        meshManager.Mesh[col, row] = tmp;
+        MapUpdate();
+    }
+    public void RemoveCell(int col,int row) {
+        meshManager.DestroyBall(col,row);
+        
+    }
+    public void RemoveCells(IList<Cell> list) {
+        foreach (Cell cell in list) {
+            meshManager.DestroyBall(cell);
         }
+    }
+    public IList<Cell> Match() {
+        IList< Cell > list = new List<Cell>();
+        for (int row = 0; row < Constants.HEIGHT; row++) {
+            list.Clear();
+            list.Add(meshManager.Mesh[0, row]);
+            for (int col = 1; col < Constants.WIDTH; col++) {
+                var sample = list[0];
+                var current = meshManager.Mesh[col, row];
+                if (sample != null) {
+                    if (current != null && sample.ballType == current.ballType) {  //continue math
+                        list.Add(current);
+                    } else {
+                        if(list.Count >= Constants.MATCH_COUNT) {
+                            MapUpdate();
+                            return list;
+                        }
+                        list.Clear();
+                        list.Add(current);
+                    }
+                    //if (list.Count >= Constants.MATCH_COUNT) {
+                    //    return list;
+                    //}
+                } else {
+                    if(list.Count >= Constants.MATCH_COUNT) {
+                        MapUpdate();
+                        return list;
+                    }
+                    list.Clear();
+                    list.Add(current);
+                }
+            }
+        }
+        list.Clear();
+        for (int col = 0; col < Constants.WIDTH; col++) {
+            list.Clear();
+            list.Add(meshManager.Mesh[col, 0]);
+            for(int row = 1; row <Constants.HEIGHT; row++) {
+                var sample = list[0];
+                var current = meshManager.Mesh[col, row];
+                if (sample != null) {
+                    if(current!=null && sample.ballType == current.ballType) {  //continue math
+                        list.Add(current);
+                    } else {
+                        if(list.Count >= Constants.MATCH_COUNT) {
+                            MapUpdate();
+                            return list;
+                        }
+                        list.Clear();
+                        list.Add(current);
+                    }
+                    
+                } else {
+                    if (list.Count >= Constants.MATCH_COUNT) {
+                        MapUpdate();
+                        return list;
+                    }
+                    list.Clear();
+                    list.Add(current);
+                }
+            }
+        }
+        return null;
     }
     public void FrameUpdate() {
         state.OnUpdate(); 
@@ -75,9 +150,18 @@ public class GameplayManager:IGameplayManager
 
  
     public void CellClick(int x, int y) {
-        state.OnCellSelect(x, y);
+        state.OnCellSelect(x, y); Debug.Log($"click {x}   {y}");
     }
-    
+    public void MapUpdate() {
+        for (int col = 0; col < Constants.WIDTH; col++) {           //for getting position
+            for (int row = 0; row < Constants.HEIGHT; row++) {
+                Cell cell = meshManager.Mesh[col, row];
+                if (cell != null) {                  //check not null balls
+                    cell.Update(col, row);
+                }
+            }
+        }
+    }
 }
 /*Debug.Log($"{x}  {y}");
  *         foreach (Cell cell in meshManager.Mesh) {
@@ -124,14 +208,5 @@ public class GameplayManager:IGameplayManager
     }
     
      
-    public void MapUpdate() {
-        for (int col = 0; col < Constants.WIDTH; col++) {           //for getting position
-            for (int row = 0; row < Constants.HEIGHT; row++) {
-                Cell cell = meshManager.Mesh[col, row];
-                if (cell != null) {                  //check not null balls
-                    cell.Update(col, row);
-                }
-            }
-        }
-    }
+    
      */

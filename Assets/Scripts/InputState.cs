@@ -10,9 +10,10 @@ public class InputState : IState {
     }
 
     public void OnCellSelect(int col, int row) {
+        //gameplayManager.RemoveCells(col, row);
         if (cellSelected) {
             if(Mathf.Abs(tmpCol - col)+Mathf.Abs(tmpRow - row) == 1) {
-                Debug.Log("do it!!!!!!!!!!!!!!!!!");
+                gameplayManager.state = new SwapState(gameplayManager, tmpCol, tmpRow, col, row);
             } else {
                 tmpCol = col;
                 tmpRow = row;

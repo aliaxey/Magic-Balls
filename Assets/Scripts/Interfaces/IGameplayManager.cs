@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+
 public interface IGameplayManager:IUpdatable, IInputSubscriber
 {
-    void FillMesh(int height);
+    void RemoveCells(IList<Cell> list);
+    //void FillMesh(int height);
 }

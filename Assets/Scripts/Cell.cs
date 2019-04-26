@@ -24,7 +24,8 @@ public class Cell{
         TargetY = row;
         handler.X = col;
         handler.Y = row;
-        ready = true; 
+        ready = true;
+        needUpdate = true;
     }
     
 }
