@@ -9,6 +9,7 @@ public class GameplayManager:IGameplayManager
     public bool InverseGravity { get; }
     public bool isStability;
     public bool haveEmptyCells;
+    public int score;
 
     public GameplayManager(IMeshManager manager)
     {
@@ -17,15 +18,18 @@ public class GameplayManager:IGameplayManager
         isStability = false;
         InverseGravity = false;
         haveEmptyCells = true;
+        score = 0;
     }
     public void GravityUpdate() {
+        MapUpdate();
         for (int col = 0; col < Constants.WIDTH; col++) {
             for (int row = 0; row < Constants.HEIGHT - 1; row++) {
                 if (meshManager.Mesh[col, row] == null && meshManager.Mesh[col,row + 1]!=null) {
                     meshManager.Mesh[col, row] = meshManager.Mesh[col, row + 1];
                     meshManager.Mesh[col, row + 1] = null;
                     meshManager.Mesh[col, row].Update(col, row);
-                    
+                    isStability = false;
+                    haveEmptyCells = true;
                 }
             }
         }
@@ -35,6 +39,7 @@ public class GameplayManager:IGameplayManager
         for (int col = 0; col < Constants.WIDTH; col++) {
             if (meshManager.Mesh[col, row] == null) {
                 meshManager.CreateRandomBall(col, row);
+                isStability = false;
             }
         }
         GravityUpdate();
@@ -53,6 +58,10 @@ public class GameplayManager:IGameplayManager
         foreach (Cell cell in list) {
             meshManager.DestroyBall(cell);
         }
+        haveEmptyCells = true;
+        GravityUpdate();
+        score += list.Count;
+        Debug.Log($"Boom! Destroyed {list.Count} balls!\nScore: {score}"); 
     }
     public IList<Cell> Match() {
         IList< Cell > list = new List<Cell>();
@@ -85,6 +94,10 @@ public class GameplayManager:IGameplayManager
                     list.Add(current);
                 }
             }
+            if (list.Count >= Constants.MATCH_COUNT) {
+                MapUpdate();
+                return list;
+            }
         }
         list.Clear();
         for (int col = 0; col < Constants.WIDTH; col++) {
@@ -113,6 +126,10 @@ public class GameplayManager:IGameplayManager
                     list.Clear();
                     list.Add(current);
                 }
+            }
+            if (list.Count >= Constants.MATCH_COUNT) {
+                MapUpdate();
+                return list;
             }
         }
         return null;
@@ -150,7 +167,8 @@ public class GameplayManager:IGameplayManager
 
  
     public void CellClick(int x, int y) {
-        state.OnCellSelect(x, y); Debug.Log($"click {x}   {y}");
+        state.OnCellSelect(x, y);
+        //Debug.Log($"click {x}   {y} ------- {meshManager.Mesh[x,y].ballType}");
     }
     public void MapUpdate() {
         for (int col = 0; col < Constants.WIDTH; col++) {           //for getting position
@@ -158,9 +176,12 @@ public class GameplayManager:IGameplayManager
                 Cell cell = meshManager.Mesh[col, row];
                 if (cell != null) {                  //check not null balls
                     cell.Update(col, row);
+                } else {
+                    isStability = false;
                 }
             }
         }
+        
     }
 }
 /*Debug.Log($"{x}  {y}");

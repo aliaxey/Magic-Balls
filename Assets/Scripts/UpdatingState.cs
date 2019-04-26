@@ -11,23 +11,27 @@ public class UpdatingState : IState {
     }
 
     public void OnUpdate() {
-        Debug.Log($"<<<<<<{gameplayManager.isStability}]]]]]]]]]][[[[[[{gameplayManager.haveEmptyCells}");
-        gameplayManager.PositionUpdate();
+        //Debug.Log($"<<<<<<{gameplayManager.isStability}]]]]]]]]]][[[[[[{gameplayManager.haveEmptyCells}");
         gameplayManager.GravityUpdate();
+        gameplayManager.MapUpdate();
+        gameplayManager.PositionUpdate();
+        IList<Cell> list;
         if (gameplayManager.isStability) {
-            IList<Cell> list = gameplayManager.Match();
+            list = gameplayManager.Match();
             while(list != null) {
                 gameplayManager.GravityUpdate();
                 gameplayManager.RemoveCells(list);
-                gameplayManager.GravityUpdate();
                 list = gameplayManager.Match();
+                gameplayManager.GravityUpdate();
             }
+            
             if (gameplayManager.haveEmptyCells) {
                 gameplayManager.GravityUpdate();
                 gameplayManager.FillStartRow(Constants.HEIGHT - 1);
                 gameplayManager.GravityUpdate();
             } else  {
-                if(list == null) {
+                list = gameplayManager.Match();
+                if(list == null&&!gameplayManager.haveEmptyCells) {
                     gameplayManager.state = new InputState(gameplayManager);
                 }
             }
