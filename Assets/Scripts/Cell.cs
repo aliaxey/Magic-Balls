@@ -10,6 +10,7 @@ public class Cell{
     public float Speed { get; set; }
     private TochHandler handler;
     public BallType ballType;
+    public bool isBooster;
 
     public Cell(GameObject ball,BallType type) {
         this.ball = ball;
@@ -17,7 +18,8 @@ public class Cell{
         handler = ball.GetComponent<TochHandler>();
         needUpdate = true;
         ready = false; 
-        Speed = 0; 
+        Speed = 0;
+        isBooster = false;
     }
     public void Update(int col,int row) {
         TargetX = col;
