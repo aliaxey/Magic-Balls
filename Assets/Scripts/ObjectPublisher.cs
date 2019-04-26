@@ -14,6 +14,12 @@ public class ObjectPubisher : IObjectPublisher {
         Object ball = creator.CreateNewBall(type);
         return Publish(ball, position);
     }
+
+    public GameObject CreateBooster(BallType type, Vector3 position) {
+        Object ball = creator.CreateNewBoost(type);
+        return Publish(ball, position);
+    }
+
     private GameObject Publish(Object obj, Vector3 position) {
         GameObject gameObject = Object.Instantiate(obj, position, Quaternion.identity)as GameObject;
         

@@ -30,4 +30,23 @@ public class ObjectCreator :  IObjectCreator {
         return (Object)chace[ball];
         
     }
+
+    public Object CreateNewBoost(BallType ball) {
+        string link = "";
+        switch (ball) {
+            case BallType.RED:
+                link = "Prefabs/boosterRedBall";
+                break;
+            case BallType.GREEN:
+                link = "Prefabs/boosterGreenBall";
+                break;
+            case BallType.BLUE:
+                link = "Prefabs/boosterBlueBall";
+                break;
+            case BallType.YELLOW:
+                link = "Prefabs/boosterYellowBall";
+                break;
+        }
+        return Resources.Load(link);
+    }
 }

@@ -44,6 +44,11 @@ public class MeshManager:IMeshManager{
         var ball = publisher.CreateBall(type, AbsolutePos(col, row));
         Mesh[col, row] = new Cell(ball,type);
     }
+    void CreateBooster(int col,int row,BallType type) {
+        BallType type = GetRandomBall();
+        var ball = publisher.CreateBall(type, AbsolutePos(col, row));
+        Mesh[col, row] = new Cell(ball, type);
+    }
 
     private int GetFreeRow(int col)
     {
