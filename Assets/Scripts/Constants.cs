@@ -13,4 +13,6 @@ public class Constants
     public static readonly float SPAM_DELAY = 0.1f;
 
     #endregion
+    public const int BOOSTER_CREATE_SCORE = 5;
+    public const string SAVE_PATH = "/saved_game.json";
 }

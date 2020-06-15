@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33598039640078922}
   - component: {fileID: 23166754773087436}
   - component: {fileID: 135979026169552062}
+  - component: {fileID: 295504666573539408}
   m_Layer: 0
   m_Name: blueBall
   m_TagString: Untagged
@@ -91,3 +92,15 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!122 &295504666573539408
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971092718689790}
+  m_Enabled: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4291966207
+  m_Size: 0.9

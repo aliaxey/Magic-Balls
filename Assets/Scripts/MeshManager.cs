@@ -72,13 +72,10 @@ public class MeshManager:IMeshManager{
         switch (rand) {
             case 0:
                 return BallType.RED;
-                break;
             case 1:
                 return BallType.GREEN;
-                break;
             case 2:
                 return BallType.BLUE;
-                break;
             default:
                 return BallType.YELLOW;
         }

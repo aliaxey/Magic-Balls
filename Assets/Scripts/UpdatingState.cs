@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 public class UpdatingState : IState {
-    private GameplayManager gameplayManager;
-    public UpdatingState(GameplayManager gameplayManager) {
+    private IGameplayManager gameplayManager;
+    private IList<Cell> list;
+
+    public UpdatingState(IGameplayManager gameplayManager) {
         this.gameplayManager = gameplayManager;
     }
 
@@ -11,24 +13,50 @@ public class UpdatingState : IState {
     }
 
     public void OnUpdate() {
+        gameplayManager.PositionUpdate();
+        gameplayManager.GravityUpdate();
+        if (gameplayManager.isStability) {
+            //gameplayManager.GravityUpdate();
+            list = gameplayManager.Match();
+            while (list != null) {
+                gameplayManager.RemoveCells(list);
+                //gameplayManager.GravityUpdate();                           --
+                list = gameplayManager.Match();
+                //gameplayManager.GravityUpdate();
+            }
+
+            if (gameplayManager.haveEmptyCells) {
+                //gameplayManager.GravityUpdate();
+                gameplayManager.FillStartRow();
+                gameplayManager.GravityUpdate();                         
+            } else {
+                list = gameplayManager.Match();
+                if (list == null && !gameplayManager.haveEmptyCells) {
+                    gameplayManager.state = new InputState(gameplayManager);
+                }
+            }
+        }
+    }
+
+    public void OOnUpdate() {
         //Debug.Log($"<<<<<<{gameplayManager.isStability}]]]]]]]]]][[[[[[{gameplayManager.haveEmptyCells}");
         gameplayManager.GravityUpdate();
-        gameplayManager.MapUpdate();
         gameplayManager.PositionUpdate();
         IList<Cell> list;
         if (gameplayManager.isStability) {
+            //gameplayManager.GravityUpdate();                                     ---
             list = gameplayManager.Match();
             while(list != null) {
-                gameplayManager.GravityUpdate();
                 gameplayManager.RemoveCells(list);
+                //gameplayManager.GravityUpdate();                                   ---
                 list = gameplayManager.Match();
-                gameplayManager.GravityUpdate();
+                //gameplayManager.GravityUpdate();
             }
             
             if (gameplayManager.haveEmptyCells) {
-                gameplayManager.GravityUpdate();
+                //gameplayManager.GravityUpdate();
                 gameplayManager.FillStartRow();
-                gameplayManager.GravityUpdate();
+                //gameplayManager.GravityUpdate();                    --
             } else  {
                 list = gameplayManager.Match();
                 if(list == null&&!gameplayManager.haveEmptyCells) {

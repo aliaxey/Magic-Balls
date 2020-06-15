@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!111 &7186078404451770036
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487639330161754780}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 8e2819677d00d054592a3f9bdd5063db, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 8e2819677d00d054592a3f9bdd5063db, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1001 &2486794553970138978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9,7 +25,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1971092718689790, guid: 0df47788abdf06b4dbfac412b06947c3, type: 3}
       propertyPath: m_Name
-      value: boosterBllueBall
+      value: boosterBlueBall
       objectReference: {fileID: 0}
     - target: {fileID: 4959315100560192, guid: 0df47788abdf06b4dbfac412b06947c3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -62,3 +78,9 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a6442780990f11a47980e07f83d4b6d0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0df47788abdf06b4dbfac412b06947c3, type: 3}
+--- !u!1 &2487639330161754780 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1971092718689790, guid: 0df47788abdf06b4dbfac412b06947c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2486794553970138978}
+  m_PrefabAsset: {fileID: 0}

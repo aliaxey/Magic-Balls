@@ -2,17 +2,16 @@
 using UnityEngine;
 
 public class Bootstrapper : MonoBehaviour {
-
+    public static GameSaver gameSaver; //TODO rm
 	void Start () {
 
         IObjectCreator creator = new ObjectCreator();
         IInputMamager inputMamager = new InputManager();
-        IObjectPublisher publisher = new ObjectPubisher(creator,inputMamager);
+        IObjectPublisher publisher = new ObjectPubisher(creator, inputMamager);
         IMeshManager meshManager = new MeshManager(publisher);
         IGameplayManager gameplayManager = new GameplayManager(meshManager);
-        IMeshFiller meshFiller = new MeshFiller(meshManager);
 
-
+        
         var updateManagerHolder = new GameObject("UpdateManagerHolder");
         updateManagerHolder.AddComponent<UpdateManager>();
         updateManagerHolder.AddComponent<Corutinier>();
@@ -22,8 +21,8 @@ public class Bootstrapper : MonoBehaviour {
         updateManager.AddSubscriber(gameplayManager);
         inputMamager.AddSubscriber(gameplayManager);
         ICorutinier corutinier = updateManagerHolder.GetComponent<Corutinier>();
-        meshFiller.Coroutinier = corutinier;
-
+        gameSaver = new GameSaver(gameplayManager);
+        gameSaver.Restore(); 
         //gameplayManager.FillMesh(Constants.HEIGHT-1);  
         //meshFiller.FillMesh();
 
